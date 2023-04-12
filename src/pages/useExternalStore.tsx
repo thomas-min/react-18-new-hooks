@@ -7,25 +7,30 @@ export default function TodosApp() {
   const todos = useSyncExternalStore(
     todosStore.subscribe,
     todosStore.getSnapshot,
+    // for ssr
     todosStore.getSnapshot
   );
   return (
-    <>
-      <button onClick={() => todosStore.addTodo()}>Add todo</button>
-      <hr />
+    <div className="p-4">
+      <button className="btn btn-primary" onClick={() => todosStore.addTodo()}>
+        Add todo
+      </button>
+      <hr className="my-4" />
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>{todo.text}</li>
+          <li className="text-xl mb-1" key={todo.id}>
+            {todo.text}
+          </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }
 
-// mock external store
+// mock pub sub external store
 let nextId = 0;
 let todos = [{ id: nextId++, text: "Todo #1" }];
-let listeners: Function[] = [];
+let listeners: Set<Function> = new Set();
 
 const todosStore = {
   addTodo() {
@@ -33,9 +38,9 @@ const todosStore = {
     emitChange();
   },
   subscribe(listener: Function) {
-    listeners = [...listeners, listener];
+    listeners.add(listener);
     return () => {
-      listeners = listeners.filter((l) => l !== listener);
+      listeners.delete(listener);
     };
   },
   getSnapshot() {
@@ -45,6 +50,8 @@ const todosStore = {
 
 function emitChange() {
   for (let listener of listeners) {
+    console.log("emitChange");
+    console.log(listener);
     listener();
   }
 }

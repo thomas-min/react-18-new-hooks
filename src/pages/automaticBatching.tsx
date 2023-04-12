@@ -26,12 +26,21 @@ export default function App() {
   }
 
   return (
-    <div>
-      <div style={{ display: "flex", gap: "4px" }}>
-        <button onClick={handleClick}>Next</button>
-        <button onClick={handleClickNoBatching}>Next(no batching)</button>
-      </div>
-      <h1 style={{ color: flag ? "blue" : "yellow" }}>{count}</h1>
+    <div className="p-4">
+      <p className="text-2xl mb-4">
+        Count :
+        <span className={flag ? "text-blue-500" : "text-yellow-500"}>
+          {count}
+        </span>
+      </p>
+      <section className="flex gap-2">
+        <button className="btn btn-primary" onClick={handleClick}>
+          Next
+        </button>
+        <button className="btn btn-secondary" onClick={handleClickNoBatching}>
+          Next(no batching)
+        </button>
+      </section>
     </div>
   );
 }

@@ -8,21 +8,25 @@ export default function TabContainer() {
   const [tab, setTab] = useState<"about" | "posts" | "contact">("about");
 
   return (
-    <>
-      <TabButton isActive={tab === "about"} onClick={() => setTab("about")}>
-        About
-      </TabButton>
-      <TabButton isActive={tab === "posts"} onClick={() => setTab("posts")}>
-        Posts (slow)
-      </TabButton>
-      <TabButton isActive={tab === "contact"} onClick={() => setTab("contact")}>
-        Contact
-      </TabButton>
-      <hr />
+    <div className="p-4">
+      <div className="tabs">
+        <TabButton isActive={tab === "about"} onClick={() => setTab("about")}>
+          About
+        </TabButton>
+        <TabButton isActive={tab === "posts"} onClick={() => setTab("posts")}>
+          Posts (slow)
+        </TabButton>
+        <TabButton
+          isActive={tab === "contact"}
+          onClick={() => setTab("contact")}
+        >
+          Contact
+        </TabButton>
+      </div>
       {tab === "about" && <AboutTab />}
       {tab === "posts" && <PostsTab />}
       {tab === "contact" && <ContactTab />}
-    </>
+    </div>
   );
 }
 
@@ -37,13 +41,16 @@ export function TabButton({
 }) {
   const [isPending, startTransition] = useTransition();
   if (isActive) {
-    return <b>{children}</b>;
+    return <button className="tab tab-bordered tab-active">{children}</button>;
   }
   if (isPending) {
-    return <b style={{ color: "yellow" }}>{children}</b>;
+    return (
+      <button className="tab tab-bordered text-blue-500">{children}</button>
+    );
   }
   return (
     <button
+      className="tab tab-bordered"
       onClick={() => {
         startTransition(() => {
           onClick();
@@ -81,12 +88,12 @@ function SlowPost({ index }: { index: number }) {
 
 export function ContactTab() {
   return (
-    <>
+    <div>
       <p>You can find me online here:</p>
       <ul>
         <li>admin@mysite.com</li>
         <li>+123456789</li>
       </ul>
-    </>
+    </div>
   );
 }

@@ -10,15 +10,25 @@ export default function Search() {
   const deferredQuery = useDeferredValue(query);
 
   return (
-    <>
-      <label>
-        Search albums:
-        <input value={query} onChange={(e) => setQuery(e.target.value)} />
-      </label>
-      <Suspense fallback={<h2>Loading...</h2>}>
-        <SearchResults query={deferredQuery} />
+    <div className="p-4">
+      <div className="form-control max-w-sm">
+        <label className="label" htmlFor="query">
+          Search albums
+        </label>
+        <input
+          className="input input-bordered"
+          id="query"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      </div>
+      <Suspense fallback={<h2 className="text-2xl m-4">Loading...</h2>}>
+        <SearchResults
+          // query={query}
+          query={deferredQuery}
+        />
       </Suspense>
-    </>
+    </div>
   );
 }
 
@@ -29,15 +39,15 @@ function SearchResults({ query }: { query: string }) {
   const albums = use<Album[]>(fetchData(`/search?q=${query}`));
   if (albums.length === 0) {
     return (
-      <p>
+      <p className="text-lg my-4">
         No matches for <i>{query}</i>
       </p>
     );
   }
   return (
-    <ul>
+    <ul className="text-lg my-4">
       {albums.map((album: { id: number; title: string; year: number }) => (
-        <li key={album.id}>
+        <li className="mb-1" key={album.id}>
           {album.title} ({album.year})
         </li>
       ))}
